@@ -12,6 +12,7 @@ import SwiftUI
 struct HomeView: View {
     var response: Response?
     @State var openChannel: String?
+    @EnvironmentObject var player: Player
     
     var body: some View {
         NavigationView {
@@ -35,6 +36,9 @@ struct HomeView: View {
                                     ChannelCardView(result: result)
                                 }
                                 .buttonStyle(.card)
+                                // Before anything has played, Play/Pause opens the focused channel (same as Select).
+                                // Otherwise fall through to the app-wide toggle in ContentView.
+                                .onPlayPauseCommand(perform: player.customerPlayerStatus == .None ? { openChannel = result.channelName } : nil)
                             }
                         }
                     }
