@@ -43,6 +43,7 @@ struct HomeView: View {
                         // Before anything has played, Play/Pause opens the focused channel (same as Select).
                         // Otherwise it keeps the usual pause/resume toggle.
                         .onPlayPauseCommand {
+                            print("[PLAYPAUSE-DEBUG] HomeView handler: status=\(player.customerPlayerStatus) focused=\(String(describing: focusedChannel))")
                             if player.customerPlayerStatus == .None, let channel = focusedChannel {
                                 openChannel = channel
                             } else {

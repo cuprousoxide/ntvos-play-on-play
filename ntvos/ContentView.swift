@@ -35,6 +35,7 @@ struct ContentView: View {
             HomeViewManager()
         }
         .onPlayPauseCommand(perform: {
+            print("[PLAYPAUSE-DEBUG] ContentView handler: status=\(player.customerPlayerStatus)")
             player.toggle()
         })
         .environmentObject(player)
