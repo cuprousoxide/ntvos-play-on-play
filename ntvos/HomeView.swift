@@ -40,6 +40,14 @@ struct HomeView: View {
                                 .focused($focusedChannel, equals: result.channelName)
                             }
                         }
+                        // Focus the first card once the cards load, so Play/Pause has a station to start.
+                        .onAppear {
+                            DispatchQueue.main.async {
+                                if focusedChannel == nil {
+                                    focusedChannel = response?.results.first?.channelName
+                                }
+                            }
+                        }
                         // Before anything has played, Play/Pause opens the focused channel (same as Select).
                         // Otherwise it keeps the usual pause/resume toggle.
                         .onPlayPauseCommand {
