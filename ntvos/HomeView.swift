@@ -13,6 +13,7 @@ struct HomeView: View {
     var response: Response?
     @State var openChannel: String?
     @EnvironmentObject var player: Player
+    @FocusState private var focusedChannel: String?
     
     var body: some View {
         NavigationView {
@@ -36,9 +37,16 @@ struct HomeView: View {
                                     ChannelCardView(result: result)
                                 }
                                 .buttonStyle(.card)
-                                // Before anything has played, Play/Pause opens the focused channel (same as Select).
-                                // Otherwise fall through to the app-wide toggle in ContentView.
-                                .onPlayPauseCommand(perform: player.customerPlayerStatus == .None ? { openChannel = result.channelName } : nil)
+                                .focused($focusedChannel, equals: result.channelName)
+                            }
+                        }
+                        // Before anything has played, Play/Pause opens the focused channel (same as Select).
+                        // Otherwise it keeps the usual pause/resume toggle.
+                        .onPlayPauseCommand {
+                            if player.customerPlayerStatus == .None, let channel = focusedChannel {
+                                openChannel = channel
+                            } else {
+                                player.toggle()
                             }
                         }
                     }
